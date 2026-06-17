@@ -25,6 +25,25 @@ $env:WEB_PORT = "8020"
 双击或执行 `stop_web.ps1` 可按 `data/qdii-monitor.pid` 精确停止本项目服务，
 不会批量结束其他 Python 进程。
 
+Linux / macOS:
+
+```bash
+cd /path/to/qdii-monitor
+python3 -m venv .venv
+.venv/bin/python -m pip install -r requirements.txt
+chmod +x run_web.sh stop_web.sh
+./run_web.sh
+```
+
+默认同样访问 `http://127.0.0.1:8010`。可用环境变量覆盖监听地址和端口：
+
+```bash
+WEB_HOST=0.0.0.0 WEB_PORT=8010 ./run_web.sh
+```
+
+执行 `./stop_web.sh` 会按 `data/qdii-monitor.pid` 和 `uvicorn qdii_monitor.app:app`
+命令行校验后停止服务，避免误杀其他 Python 进程。
+
 若下载期间出现 `ReadTimeoutError` 或代理握手超时，可增加 pip 的超时和重试次数后重新安装：
 
 ```powershell
