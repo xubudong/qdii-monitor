@@ -50,7 +50,7 @@ def create_app(
     @app.get("/api/dashboard")
     def dashboard(
         snapshot_at: str | None = Query(default=None),
-        snapshot_mode: str = Query(default="day", pattern="^(latest|day|open|close)$"),
+        snapshot_mode: str = Query(default="day", pattern="^(latest|day|open|close|us_close)$"),
     ) -> dict[str, Any]:
         return service.dashboard(snapshot_at, snapshot_mode)
 

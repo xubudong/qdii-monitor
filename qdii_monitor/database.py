@@ -317,6 +317,8 @@ class Database:
             return self._daily_quote_snapshot_times(limit, prefer="close")
         if mode == "open":
             return self._daily_quote_snapshot_times(limit, prefer="open")
+        if mode == "us_close":
+            return self._daily_quote_snapshot_times(limit, prefer="us_close")
         with self.connect() as conn:
             rows = conn.execute(
                 """
@@ -346,17 +348,31 @@ class Database:
             result = []
             for day in days:
                 trade_date = day["trade_date"]
-                row = conn.execute(
-                    f"""
-                    SELECT captured_at, COUNT(*) AS fund_count
-                    FROM quote_snapshots
-                    WHERE captured_at >= ? AND captured_at < ?
-                    GROUP BY captured_at
-                    ORDER BY captured_at {order}
-                    LIMIT 1
-                    """,
-                    (f"{trade_date}T09:30:00", f"{trade_date}T15:30:00"),
-                ).fetchone()
+                if prefer == "us_close":
+                    row = conn.execute(
+                        """
+                        SELECT captured_at, COUNT(*) AS fund_count
+                        FROM quote_snapshots
+                        WHERE substr(captured_at, 1, 10) = ?
+                        GROUP BY captured_at
+                        ORDER BY ABS((julianday(substr(captured_at, 1, 19)) - julianday(?)) * 86400),
+                                 captured_at ASC
+                        LIMIT 1
+                        """,
+                        (trade_date, f"{trade_date}T04:00:00"),
+                    ).fetchone()
+                else:
+                    row = conn.execute(
+                        f"""
+                        SELECT captured_at, COUNT(*) AS fund_count
+                        FROM quote_snapshots
+                        WHERE captured_at >= ? AND captured_at < ?
+                        GROUP BY captured_at
+                        ORDER BY captured_at {order}
+                        LIMIT 1
+                        """,
+                        (f"{trade_date}T09:30:00", f"{trade_date}T15:30:00"),
+                    ).fetchone()
                 if row is None:
                     row = conn.execute(
                         f"""

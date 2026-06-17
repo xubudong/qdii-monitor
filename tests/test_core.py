@@ -449,8 +449,10 @@ def test_database_filters_quote_snapshot_times_by_daily_mode(tmp_path: Path) -> 
     db.initialize()
     rows = []
     for captured_at, price in (
+        ("2026-06-05T03:58:00+08:00", 1.98),
         ("2026-06-05T09:35:00+08:00", 2.00),
         ("2026-06-05T15:00:00+08:00", 2.10),
+        ("2026-06-08T04:02:00+08:00", 2.18),
         ("2026-06-08T09:35:00+08:00", 2.20),
         ("2026-06-08T15:00:00+08:00", 2.30),
     ):
@@ -472,8 +474,10 @@ def test_database_filters_quote_snapshot_times_by_daily_mode(tmp_path: Path) -> 
     assert [row["captured_at"] for row in db.quote_snapshot_times(mode="latest")] == [
         "2026-06-08T15:00:00+08:00",
         "2026-06-08T09:35:00+08:00",
+        "2026-06-08T04:02:00+08:00",
         "2026-06-05T15:00:00+08:00",
         "2026-06-05T09:35:00+08:00",
+        "2026-06-05T03:58:00+08:00",
     ]
     assert [row["captured_at"] for row in db.quote_snapshot_times(mode="open")] == [
         "2026-06-08T09:35:00+08:00",
@@ -482,6 +486,10 @@ def test_database_filters_quote_snapshot_times_by_daily_mode(tmp_path: Path) -> 
     assert [row["captured_at"] for row in db.quote_snapshot_times(mode="close")] == [
         "2026-06-08T15:00:00+08:00",
         "2026-06-05T15:00:00+08:00",
+    ]
+    assert [row["captured_at"] for row in db.quote_snapshot_times(mode="us_close")] == [
+        "2026-06-08T04:02:00+08:00",
+        "2026-06-05T03:58:00+08:00",
     ]
 
 
