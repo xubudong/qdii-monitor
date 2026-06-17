@@ -1,0 +1,15 @@
+.venv/
+.env
+node_modules/
+outputs/
+__pycache__/
+.pytest_cache/
+*.pyc
+*.log
+=
+data/*
+!data/.gitkeep
+!data/.gitignore
+data/*.sqlite
+data/*.sqlite-*
+data/*.pid

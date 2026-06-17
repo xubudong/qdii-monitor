@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>QDII ETF 溢价与公告监控台</title>
+    <link rel="icon" href="/static/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/static/styles.css?v=20260611-1" />
+  </head>
+  <body>
+    <header class="hero">
+      <div>
+        <p class="eyebrow">QDII MONITOR</p>
+        <h1>QDII ETF 溢价与公告监控台</h1>
+        <p class="intro">按同一指数观察实时溢价、盘中参考行情、申购公告与 QDII 额度变化。仅用于监控公开数据，不构成交易指令。</p>
+      </div>
+      <div class="actions">
+        <select id="snapshotSelect" class="snapshot-select" aria-label="溢价快照时间">
+          <option value="">最新快照</option>
+        </select>
+        <select id="snapshotModeSelect" class="refresh-select" aria-label="快照显示粒度">
+          <option value="day" selected>每天收盘</option>
+          <option value="open">每天开盘</option>
+          <option value="latest">全部实时</option>
+        </select>
+        <select id="autoRefreshSelect" class="refresh-select" aria-label="自动刷新间隔">
+          <option value="300000" selected>每5分钟</option>
+          <option value="600000">每10分钟</option>
+          <option value="1800000">每30分钟</option>
+          <option value="0">停止自动</option>
+        </select>
+        <button id="snapshotAll">全部快照</button>
+        <button id="quoteRefresh" class="primary">刷新</button>
+        <button id="noticeRefresh" class="secondary-action">刷新公告</button>
+        <button id="quotaRefresh" class="secondary-action">刷新额度</button>
+      </div>
+    </header>
+    <main>
+      <section class="status-card">
+        <div>
+          <p class="label">采集状态</p>
+          <div id="taskStatus" class="task-grid"><span class="muted">读取中...</span></div>
+        </div>
+        <div class="upload">
+          <label class="label" for="holdingFile">持仓导入（券商 table.xls）</label>
+          <input type="file" id="holdingFile" accept=".xls,.txt,.csv" />
+          <button id="uploadButton">上传持仓</button>
+        </div>
+      </section>
+
+      <nav class="view-tabs" aria-label="监控视图">
+        <button class="view-tab active" data-view="live" aria-selected="true">实时监控</button>
+        <button class="view-tab" data-view="history" aria-selected="false">历史变化</button>
+      </nav>
+
+      <div id="liveView" class="view-panel">
+        <section>
+          <div class="section-head">
+            <div>
+              <p class="label">场内监控</p>
+              <h2>同指数溢价比较</h2>
+            </div>
+            <p class="muted">天天基金只展示明确申购状态或有效限额；正式依据请查看交易所公告原文</p>
+          </div>
+          <div id="groups" class="groups"></div>
+        </section>
+
+        <section class="two-column">
+          <article class="panel">
+            <div class="section-head compact">
+              <div>
+                <p class="label">当前持仓</p>
+                <h2>未实现盈亏</h2>
+              </div>
+            </div>
+            <div id="portfolioTotals" class="totals"></div>
+            <div id="holdings"></div>
+          </article>
+          <article class="panel">
+            <div class="section-head compact">
+              <div>
+                <p class="label">外管局</p>
+                <h2>QDII 额度变更</h2>
+              </div>
+            </div>
+            <div id="quota" class="timeline"></div>
+          </article>
+        </section>
+
+        <section class="panel">
+          <div class="section-head compact">
+            <div>
+              <p class="label">交易所正式披露</p>
+              <h2>申购相关公告时间线</h2>
+            </div>
+          </div>
+          <p class="muted notice-note">表格中的天天基金状态和限额为聚合辅助数据；若该渠道仅返回“场内交易”，表格将不展示无效信息。此处时间线来自交易所正式披露，请点击原文核验适用日期与额度。</p>
+          <div id="notices" class="timeline"></div>
+        </section>
+      </div>
+
+      <div id="historyView" class="view-panel" hidden>
+        <section class="panel history-panel">
+          <div class="section-head compact history-head">
+            <div>
+              <p class="label">交互曲线</p>
+              <h2>溢价率与参考行情</h2>
+            </div>
+            <div class="history-controls">
+              <div class="metric-tabs" aria-label="曲线口径">
+                <button class="metric-tab active" data-metric="today" aria-selected="true">当日盘中</button>
+                <button class="metric-tab" data-metric="daily" aria-selected="false">历史日线</button>
+              </div>
+              <button id="historyRefresh" hidden>刷新历史日线</button>
+            </div>
+          </div>
+          <p id="historyNote" class="muted history-note"></p>
+          <div id="historyCharts" class="history-charts"></div>
+        </section>
+      </div>
+    </main>
+    <div id="toast" role="status"></div>
+    <script src="/static/vendor/plotly.min.js"></script>
+    <script src="/static/app.js?v=20260611-1"></script>
+  </body>
+</html>

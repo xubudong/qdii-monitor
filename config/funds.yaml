@@ -1,0 +1,271 @@
+version: 1
+notice_sources:
+  sse:
+    name: 上海证券交易所基金公告
+    url: https://www.sse.com.cn/disclosure/fund/announcement/
+  szse:
+    name: 深圳证券交易所基金公告
+    url: https://www.szse.cn/disclosure/fund/notice/index.html
+quota_source:
+  name: 国家外汇管理局 QDII 投资额度审批情况表
+  url: https://www.safe.gov.cn/safe/hgzwjgtzzedspqkb/index.html
+groups:
+  - id: nasdaq_100
+    name: 纳斯达克 100 体系
+    reference:
+      code: NQ00Y
+      display_name: 小型纳指当月连续
+      source: eastmoney_global_futures
+    funds:
+      - code: "513100"
+        exchange: SSE
+        display_name: 纳指ETF国泰
+        fund_name: 国泰纳斯达克100交易型开放式指数证券投资基金
+        manager: 国泰基金管理有限公司
+        inception_date: "2013-04-25"
+        asset_size_cny: 15534000000
+        size_source: 资产规模
+        metadata_source: 天天基金基金概况
+        metadata_fetched_at: "2026-03-31"
+      - code: "513110"
+        exchange: SSE
+        display_name: 纳指ETF华泰柏瑞
+        fund_name: 华泰柏瑞纳斯达克100交易型开放式指数证券投资基金（QDII）
+        manager: 华泰柏瑞基金管理有限公司
+        inception_date: "2023-03-01"
+        asset_size_cny: 3962000000
+        size_source: 资产规模
+        metadata_source: 天天基金基金概况
+        metadata_fetched_at: "2026-03-31"
+      - code: "513300"
+        exchange: SSE
+        display_name: 纳斯达克ETF华夏
+        fund_name: 华夏纳斯达克100交易型开放式指数证券投资基金（QDII）
+        manager: 华夏基金管理有限公司
+        inception_date: "2020-10-22"
+        asset_size_cny: 10526000000
+        size_source: 资产规模
+        metadata_source: 天天基金基金概况
+        metadata_fetched_at: "2026-03-31"
+      - code: "513390"
+        exchange: SSE
+        display_name: 纳指100ETF博时
+        fund_name: 博时纳斯达克100交易型开放式指数证券投资基金（QDII）
+        manager: 博时基金管理有限公司
+        inception_date: "2023-04-19"
+        asset_size_cny: 3294000000
+        size_source: 资产规模
+        metadata_source: 天天基金基金概况
+        metadata_fetched_at: "2026-03-31"
+      - code: "513870"
+        exchange: SSE
+        display_name: 纳指ETF富国
+        fund_name: 富国纳斯达克100交易型开放式指数证券投资基金（QDII）
+        manager: 富国基金管理有限公司
+        inception_date: "2023-10-25"
+        asset_size_cny: 1926000000
+        size_source: 资产规模
+        metadata_source: 天天基金基金概况
+        metadata_fetched_at: "2026-03-31"
+      - code: "159501"
+        exchange: SZSE
+        display_name: 纳指ETF嘉实
+        fund_name: 嘉实纳斯达克100交易型开放式指数证券投资基金（QDII）
+        manager: 嘉实基金管理有限公司
+        inception_date: "2023-05-31"
+        asset_size_cny: 9611000000
+        size_source: 资产规模
+        metadata_source: 天天基金基金概况
+        metadata_fetched_at: "2026-03-31"
+      - code: "159509"
+        exchange: SZSE
+        display_name: 纳指科技ETF景顺
+        fund_name: 景顺长城纳斯达克科技市值加权交易型开放式指数证券投资基金（QDII）
+        manager: 景顺长城基金管理有限公司
+        comparison_eligible: false
+        inception_date: "2023-07-19"
+        asset_size_cny: 11172000000
+        size_source: 资产规模
+        metadata_source: 天天基金基金概况
+        metadata_fetched_at: "2026-03-31"
+      - code: "159513"
+        exchange: SZSE
+        display_name: 纳斯达克100ETF大成
+        fund_name: 大成纳斯达克100交易型开放式指数证券投资基金（QDII）
+        manager: 大成基金管理有限公司
+        inception_date: "2023-07-12"
+        asset_size_cny: 5572000000
+        size_source: 资产规模
+        metadata_source: 天天基金基金概况
+        metadata_fetched_at: "2026-03-31"
+      - code: "159632"
+        exchange: SZSE
+        display_name: 纳斯达克ETF华安
+        fund_name: 华安纳斯达克100交易型开放式指数证券投资基金（QDII）
+        manager: 华安基金管理有限公司
+        inception_date: "2022-07-21"
+        asset_size_cny: 8904000000
+        size_source: 资产规模
+        metadata_source: 天天基金基金概况
+        metadata_fetched_at: "2026-03-31"
+      - code: "159659"
+        exchange: SZSE
+        display_name: 纳斯达克100ETF招商
+        fund_name: 招商纳斯达克100交易型开放式指数证券投资基金（QDII）
+        manager: 招商基金管理有限公司
+        inception_date: "2023-04-12"
+        asset_size_cny: 7563000000
+        size_source: 资产规模
+        metadata_source: 天天基金基金概况
+        metadata_fetched_at: "2026-03-31"
+      - code: "159660"
+        exchange: SZSE
+        display_name: 纳指ETF汇添富
+        fund_name: 汇添富纳斯达克100交易型开放式指数证券投资基金（QDII）
+        manager: 汇添富基金管理有限公司
+        inception_date: "2023-03-30"
+        asset_size_cny: 3595000000
+        size_source: 资产规模
+        metadata_source: 天天基金基金概况
+        metadata_fetched_at: "2026-03-31"
+      - code: "159696"
+        exchange: SZSE
+        display_name: 纳指ETF易方达
+        fund_name: 易方达纳斯达克100交易型开放式指数证券投资基金（QDII）
+        manager: 易方达基金管理有限公司
+        inception_date: "2023-08-17"
+        asset_size_cny: 3760000000
+        size_source: 资产规模
+        metadata_source: 天天基金基金概况
+        metadata_fetched_at: "2026-03-31"
+      - code: "161130"
+        exchange: SZSE
+        display_name: 纳指LOF易方达
+        fund_name: 易方达纳斯达克100ETF联接(QDII-LOF)A(人民币)
+        manager: 易方达基金管理有限公司
+        official_url: https://www.efunds.com.cn/fund/161130.shtml
+        comparison_eligible: false
+        nav_estimate:
+          reference_code: NQ00Y
+          reference_weight: 0.95
+          description: 以最新官方NAV为基准，按95%纳指期货累计变动估算；现金、活期存款利率、汇率及跟踪误差暂按不变处理
+        inception_date: "2017-06-23"
+        asset_size_cny: 1517000000
+        size_source: 资产规模
+        metadata_source: 天天基金基金概况
+        metadata_fetched_at: "2026-03-31"
+      - code: "501312"
+        exchange: SSE
+        display_name: 海外科技LOF华宝
+        fund_name: 华宝海外科技股票型证券投资基金（QDII-LOF）A
+        manager: 华宝基金管理有限公司
+        official_url: https://www.fsfund.com/fund/501312/fundDetail.shtml
+        comparison_eligible: false
+        nav_estimate:
+          reference_code: NQ00Y
+          reference_weight: 0.80
+          description: 以最新官方NAV为基准，按80%纳指期货累计变动估算；恒生科技、债券、汇率及主动持仓偏差暂按不变处理
+      - code: "159941"
+        exchange: SZSE
+        display_name: 纳指ETF广发
+        fund_name: 广发纳斯达克100交易型开放式指数证券投资基金
+        manager: 广发基金管理有限公司
+        inception_date: "2015-06-10"
+        asset_size_cny: 27625000000
+        size_source: 资产规模
+        metadata_source: 天天基金基金概况
+        metadata_fetched_at: "2026-03-31"
+  - id: nikkei_225
+    name: 日经 225 体系
+    reference:
+      code: N225
+      display_name: 日经225指数
+      source: eastmoney_global_index
+    funds:
+      - code: "513000"
+        exchange: SSE
+        display_name: 日经225ETF易方达
+        fund_name: 易方达奥明日经225交易型开放式指数证券投资基金（QDII）
+        manager: 易方达基金管理有限公司
+        inception_date: "2019-06-12"
+        asset_size_cny: 1657000000
+        size_source: 资产规模
+        metadata_source: 天天基金基金概况
+        metadata_fetched_at: "2026-03-31"
+      - code: "513880"
+        exchange: SSE
+        display_name: 日经225ETF华安
+        fund_name: 华安三菱日联日经225交易型开放式指数证券投资基金（QDII）
+        manager: 华安基金管理有限公司
+        inception_date: "2019-06-12"
+        asset_size_cny: 2002000000
+        size_source: 资产规模
+        metadata_source: 天天基金基金概况
+        metadata_fetched_at: "2026-03-31"
+      - code: "513520"
+        exchange: SSE
+        display_name: 日经ETF华夏
+        fund_name: 华夏野村日经225交易型开放式指数证券投资基金（QDII）
+        manager: 华夏基金管理有限公司
+        inception_date: "2019-06-12"
+        asset_size_cny: 1778000000
+        size_source: 资产规模
+        metadata_source: 天天基金基金概况
+        metadata_fetched_at: "2026-03-31"
+      - code: "159866"
+        exchange: SZSE
+        display_name: 日经ETF工银
+        fund_name: 工银瑞信大和日经225交易型开放式指数证券投资基金（QDII）
+        manager: 工银瑞信基金管理有限公司
+        inception_date: "2021-03-24"
+        asset_size_cny: 911000000
+        size_source: 资产规模
+        metadata_source: 天天基金基金概况
+        metadata_fetched_at: "2026-03-31"
+  - id: sp_500
+    name: 标普 500 体系
+    reference:
+      code: ES00Y
+      display_name: 小型标普当月连续
+      source: eastmoney_global_futures
+    funds:
+      - code: "513500"
+        exchange: SSE
+        display_name: 标普500ETF博时
+        fund_name: 博时标普500交易型开放式指数证券投资基金
+        manager: 博时基金管理有限公司
+        inception_date: "2013-12-05"
+        asset_size_cny: 20941000000
+        size_source: 资产规模
+        metadata_source: 天天基金基金概况
+        metadata_fetched_at: "2026-03-31"
+      - code: "513650"
+        exchange: SSE
+        display_name: 标普500ETF南方
+        fund_name: 南方标普500交易型开放式指数证券投资基金（QDII）
+        manager: 南方基金管理股份有限公司
+        inception_date: "2023-03-23"
+        asset_size_cny: 4575000000
+        size_source: 资产规模
+        metadata_source: 天天基金基金概况
+        metadata_fetched_at: "2026-03-31"
+      - code: "159612"
+        exchange: SZSE
+        display_name: 标普500ETF国泰
+        fund_name: 国泰标普500交易型开放式指数证券投资基金（QDII）
+        manager: 国泰基金管理有限公司
+        inception_date: "2022-05-09"
+        asset_size_cny: 745000000
+        size_source: 资产规模
+        metadata_source: 天天基金基金概况
+        metadata_fetched_at: "2026-03-31"
+      - code: "159655"
+        exchange: SZSE
+        display_name: 标普500ETF华夏
+        fund_name: 华夏标普500交易型开放式指数证券投资基金（QDII）
+        manager: 华夏基金管理有限公司
+        inception_date: "2022-10-12"
+        asset_size_cny: 3386000000
+        size_source: 资产规模
+        metadata_source: 天天基金基金概况
+        metadata_fetched_at: "2026-03-31"
