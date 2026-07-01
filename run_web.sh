@@ -6,6 +6,7 @@ cd "$(dirname "$0")"
 HOST_ADDRESS="${WEB_HOST:-127.0.0.1}"
 PORT="${WEB_PORT:-8010}"
 PID_FILE="data/qdii-monitor.pid"
+LOG_FILE="${QDII_LOG_FILE:-data/qdii-monitor.log}"
 
 if [[ -x ".venv/bin/python" ]]; then
   PYTHON=".venv/bin/python"
@@ -19,6 +20,7 @@ else
 fi
 
 mkdir -p "$(dirname "$PID_FILE")"
+mkdir -p "$(dirname "$LOG_FILE")"
 
 if [[ -f "$PID_FILE" ]]; then
   STORED_PID="$(tr -d '[:space:]' < "$PID_FILE")"
@@ -33,16 +35,8 @@ if [[ -f "$PID_FILE" ]]; then
 fi
 
 echo "Starting QDII monitor at http://$HOST_ADDRESS:$PORT"
-"$PYTHON" -m uvicorn qdii_monitor.app:app --host "$HOST_ADDRESS" --port "$PORT" &
+nohup "$PYTHON" -m uvicorn qdii_monitor.app:app --host "$HOST_ADDRESS" --port "$PORT" > "$LOG_FILE" 2>&1 &
 CHILD_PID=$!
 echo "$CHILD_PID" > "$PID_FILE"
-
-cleanup() {
-  if [[ -f "$PID_FILE" ]] && [[ "$(tr -d '[:space:]' < "$PID_FILE")" == "$CHILD_PID" ]]; then
-    rm -f "$PID_FILE"
-  fi
-}
-trap cleanup EXIT
-
-wait "$CHILD_PID"
-
+echo "PID: $CHILD_PID"
+echo "Log: $LOG_FILE"

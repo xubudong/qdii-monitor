@@ -170,3 +170,23 @@ reference:
 ```
 
 测试使用本地样本采集器，不请求外部数据源。
+
+## 刷新与 Linux 部署补充
+
+服务端会在无人打开页面时继续按计划保存快照，前端下拉框只控制当前浏览器页面的自动刷新。
+
+常用环境变量：
+
+- `QDII_QUOTE_REFRESH_MINUTES=5`：A 股交易时段行情快照间隔。
+- `QDII_PREMARKET_REFRESH_MINUTES=5`：盘前锚点刷新间隔。
+- `QDII_FRONTEND_AUTO_REFRESH_SECONDS=300`：页面默认自动刷新间隔，设为 `0` 表示默认停止。
+- `QDII_US_CLOSE_REFRESH_TIMES=04:05,04:20,05:05,05:20`：美股收盘附近的关键刷新时间，北京时间；同时覆盖夏令时和冬令时。
+- `QDII_LOG_FILE=data/qdii-monitor.log`：Linux/Windows 启动脚本写入的日志文件。
+
+Linux/VPS 上执行 `./run_web.sh` 会后台启动服务，写入 `data/qdii-monitor.pid` 并输出日志路径；停止使用 `./stop_web.sh`。如需公网访问，可用：
+
+```bash
+WEB_HOST=0.0.0.0 WEB_PORT=8010 ./run_web.sh
+```
+
+美股收盘快照用于后续核对 QDII 官方净值：调度会在上述关键时间同时刷新参考行情、盘前锚点和一份完整场内行情快照。

@@ -13,6 +13,7 @@ import pytest
 from qdii_monitor.collectors import DailyPremiumCollector, FundMetadataCollector, NoticeCollector, PurchaseStatusCollector, QuotaCollector, QuoteCollector, ReferenceCollector, _json_notices, classify_notice
 from qdii_monitor.configuration import FundTarget, ReferenceTarget
 from qdii_monitor.configuration import load_config
+from qdii_monitor.scheduler import _parse_clock_times
 from qdii_monitor.service import _estimate_nav_from_reference, _quote_with_daily_nav_fallback
 from qdii_monitor.database import Database
 from qdii_monitor.holdings import parse_holdings_text, value_holding
@@ -35,6 +36,11 @@ def test_local_env_loads_values_without_overriding_shell_environment(tmp_path: P
     assert os.environ["QDII_AKSHARE_PROXY_HOST"] == "from-shell"
     assert os.environ["QDII_AKSHARE_PROXY_TOKEN"] == "quoted-token"
     assert os.environ["QDII_AKSHARE_PROXY_RETRY"] == "9"
+
+
+def test_us_close_refresh_times_skip_invalid_values() -> None:
+    assert _parse_clock_times(("04:05", "bad", "25:00", "05:20")) == [(4, 5), (5, 20)]
+    assert _parse_clock_times(("bad",)) == [(4, 5), (5, 5)]
 
 
 def test_example_config_has_three_non_empty_groups() -> None:

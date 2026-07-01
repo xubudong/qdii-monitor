@@ -1,4 +1,4 @@
-const state = { data: null, history: null, metric: "today", snapshotAt: "", snapshotMode: "day", autoRefreshTimer: null };
+const state = { data: null, history: null, metric: "today", snapshotAt: "", snapshotMode: "day", autoRefreshTimer: null, autoRefreshConfigured: false };
 const $ = (id) => document.getElementById(id);
 const chartColors = ["#10644f", "#bd8721", "#275c8a", "#a43f34", "#67529c", "#008b84", "#c45f28", "#4f6b35", "#bd5484", "#536878", "#ca9c35", "#417d66", "#815733"];
 const TABLE_COLUMN_FLAGS = {
@@ -580,12 +580,30 @@ async function loadDashboard() {
   const response = await fetch(`/api/dashboard${query}`);
   if (!response.ok) throw new Error("仪表盘读取失败");
   state.data = await response.json();
+  applyAutoRefreshConfig(state.data);
   renderSnapshotSelect(state.data);
   renderGroups(state.data.groups, state.data.premium_history || {}, state.data.reference_history || {});
   renderHoldings(state.data.holdings);
   renderQuota(state.data.quota);
   renderNotices(state.data.notices);
   renderTasks(state.data.tasks);
+}
+
+function applyAutoRefreshConfig(payload) {
+  if (state.autoRefreshConfigured) return;
+  const seconds = Number(payload?.refresh_config?.frontend_auto_refresh_seconds);
+  if (!Number.isFinite(seconds) || seconds < 0) return;
+  const select = $("autoRefreshSelect");
+  const value = seconds === 0 ? "0" : String(Math.round(seconds * 1000));
+  if (![...select.options].some((option) => option.value === value)) {
+    const option = document.createElement("option");
+    option.value = value;
+    option.textContent = `每 ${Math.max(1, Math.round(seconds / 60))} 分钟`;
+    select.insertBefore(option, select.lastElementChild);
+  }
+  select.value = value;
+  setAutoRefreshInterval(value);
+  state.autoRefreshConfigured = true;
 }
 
 async function loadHistory() {
@@ -697,6 +715,7 @@ $("quoteRefresh").addEventListener("click", () => {
 $("noticeRefresh").addEventListener("click", () => refresh("notices", $("noticeRefresh")));
 $("quotaRefresh").addEventListener("click", () => refresh("quota", $("quotaRefresh")));
 $("autoRefreshSelect").addEventListener("change", () => {
+  state.autoRefreshConfigured = true;
   setAutoRefreshInterval($("autoRefreshSelect").value);
   toast($("autoRefreshSelect").value === "0" ? "已停止自动刷新" : `自动刷新间隔已改为 ${$("autoRefreshSelect").selectedOptions[0].textContent}`);
 });

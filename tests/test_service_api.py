@@ -507,8 +507,11 @@ def test_api_refresh_and_holdings_upload(tmp_path: Path) -> None:
     }
     app = create_app(ROOT / "config" / "funds.yaml", tmp_path / "api.sqlite", overrides, scheduler_enabled=False)
     with TestClient(app) as client:
-        assert client.get("/api/health").json()["groups"] == 3
+        health = client.get("/api/health").json()
+        assert health["groups"] == 3
+        assert health["refresh_config"]["quote_refresh_minutes"] >= 1
         blank = client.get("/api/dashboard").json()
+        assert blank["refresh_config"]["frontend_auto_refresh_seconds"] >= 0
         assert blank["groups"][0]["rows"][0]["latest_price"] is None
         assert client.post("/api/refresh/quotes").status_code == 200
         first_dashboard = client.get("/api/dashboard").json()

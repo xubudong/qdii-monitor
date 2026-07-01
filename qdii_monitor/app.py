@@ -11,7 +11,7 @@ from fastapi.staticfiles import StaticFiles
 from .configuration import load_config
 from .database import Database
 from .scheduler import create_scheduler
-from .service import MonitorService
+from .service import MonitorService, refresh_config_payload
 from .settings import CONFIG_FILE, DB_FILE, DISABLE_SCHEDULER, DISABLE_STARTUP_REFRESH, STATIC_DIR
 
 
@@ -112,6 +112,7 @@ def create_app(
             "funds": len(config.funds),
             "groups": len(config.groups),
             "scheduler_enabled": enable_scheduler,
+            "refresh_config": refresh_config_payload(),
             "tasks": db.task_statuses(),
         }
 

@@ -7,6 +7,7 @@ from .collectors import DailyPremiumCollector, FundMetadataCollector, NoticeColl
 from .configuration import MonitorConfig
 from .database import Database
 from .holdings import parse_holdings_text, value_holding
+from .settings import FRONTEND_AUTO_REFRESH_SECONDS, PREMARKET_REFRESH_MINUTES, QUOTE_REFRESH_MINUTES, US_CLOSE_REFRESH_TIMES
 from .utils import calculate_premium
 
 
@@ -416,6 +417,7 @@ class MonitorService:
             "notices": self.db.notices(),
             "quota": self.db.latest_quota_document(),
             "tasks": self.db.task_statuses(),
+            "refresh_config": refresh_config_payload(),
             "disclaimer": "仅用于监控公开数据，不构成投资建议或交易指令。",
         }
 
@@ -727,6 +729,15 @@ def _quote_with_daily_nav_fallback(
     result["premium_source"] = "latest_nav"
     result["premium_note"] = f"使用最新官方NAV估算：{latest_daily.get('trade_date')}"
     return result
+
+
+def refresh_config_payload() -> dict[str, Any]:
+    return {
+        "quote_refresh_minutes": QUOTE_REFRESH_MINUTES,
+        "premarket_refresh_minutes": PREMARKET_REFRESH_MINUTES,
+        "frontend_auto_refresh_seconds": FRONTEND_AUTO_REFRESH_SECONDS,
+        "us_close_refresh_times": list(US_CLOSE_REFRESH_TIMES),
+    }
 
 
 def _estimate_nav_from_reference(

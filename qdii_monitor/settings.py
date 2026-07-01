@@ -25,6 +25,14 @@ def load_local_env(path: Path) -> None:
         os.environ.setdefault(key, value)
 
 
+def env_int(name: str, default: int, minimum: int = 0) -> int:
+    try:
+        value = int(os.getenv(name, str(default)))
+    except ValueError:
+        value = default
+    return max(minimum, value)
+
+
 load_local_env(ROOT / ".env")
 
 CONFIG_FILE = Path(os.getenv("QDII_CONFIG_FILE", ROOT / "config" / "funds.yaml"))
@@ -34,9 +42,17 @@ STATIC_DIR = ROOT / "static"
 TIMEZONE = ZoneInfo("Asia/Shanghai")
 DISABLE_SCHEDULER = os.getenv("QDII_DISABLE_SCHEDULER", "").lower() in {"1", "true", "yes"}
 DISABLE_STARTUP_REFRESH = os.getenv("QDII_DISABLE_STARTUP_REFRESH", "").lower() in {"1", "true", "yes"}
+QUOTE_REFRESH_MINUTES = env_int("QDII_QUOTE_REFRESH_MINUTES", 5, minimum=1)
+PREMARKET_REFRESH_MINUTES = env_int("QDII_PREMARKET_REFRESH_MINUTES", QUOTE_REFRESH_MINUTES, minimum=1)
+FRONTEND_AUTO_REFRESH_SECONDS = env_int("QDII_FRONTEND_AUTO_REFRESH_SECONDS", QUOTE_REFRESH_MINUTES * 60, minimum=0)
+US_CLOSE_REFRESH_TIMES = tuple(
+    item.strip()
+    for item in os.getenv("QDII_US_CLOSE_REFRESH_TIMES", "04:05,04:20,05:05,05:20").split(",")
+    if item.strip()
+)
 AKSHARE_PROXY_HOST = os.getenv("QDII_AKSHARE_PROXY_HOST", "").strip()
 AKSHARE_PROXY_TOKEN = os.getenv("QDII_AKSHARE_PROXY_TOKEN", "").strip()
-AKSHARE_PROXY_RETRY = int(os.getenv("QDII_AKSHARE_PROXY_RETRY", "30"))
+AKSHARE_PROXY_RETRY = env_int("QDII_AKSHARE_PROXY_RETRY", 30, minimum=1)
 AKSHARE_PROXY_HOOK_DOMAINS = tuple(
     item.strip()
     for item in os.getenv("QDII_AKSHARE_PROXY_HOOK_DOMAINS", "push2his.eastmoney.com").split(",")
