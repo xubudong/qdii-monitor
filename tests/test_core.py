@@ -270,6 +270,53 @@ def test_estimated_nav_quote_view_calculates_for_newly_configured_lof(tmp_path: 
     assert "95%" in result["premium_formula"]
 
 
+def test_estimated_nav_quote_view_keeps_nav_without_venue_price(tmp_path: Path) -> None:
+    config = load_config(Path(__file__).parents[1] / "config" / "funds.yaml")
+    db = Database(tmp_path / "monitor.sqlite")
+    db.initialize()
+    db.insert_references(
+        [
+            {
+                "code": "NQ00Y",
+                "captured_at": "2026-06-13T04:00:00+08:00",
+                "latest_price": 29700.0,
+                "change_rate": 0.0,
+                "previous_settle": 29400.0,
+                "source": "test.us_close",
+            },
+            {
+                "code": "NQ00Y",
+                "captured_at": "2026-06-16T04:00:00+08:00",
+                "latest_price": 30600.0,
+                "change_rate": 0.03,
+                "previous_settle": 30500.0,
+                "source": "test.current",
+            },
+        ]
+    )
+
+    result = _quote_with_daily_nav_fallback(
+        {
+            "latest_price": None,
+            "iopv": None,
+            "premium_rate": None,
+            "source": "us_close_snapshot",
+            "captured_at": "2026-06-16T04:00:00+08:00",
+        },
+        {"trade_date": "2026-06-12", "nav": 4.4804, "close_price": 4.548},
+        config.fund_map["161130"],
+        {"NQ00Y": {"latest_price": 30600.0}},
+        db,
+    )
+
+    expected_nav = 4.4804 * (1 + 0.95 * (30600.0 / 29700.0 - 1))
+    assert result["premium_source"] == "estimated_nav_no_price"
+    assert result["iopv"] == pytest.approx(expected_nav)
+    assert result["estimated_nav"] == pytest.approx(expected_nav)
+    assert result["premium_rate"] is None
+    assert "95%" in result["premium_formula"]
+
+
 def test_quote_collector_uses_iopv_for_configured_funds() -> None:
     config = load_config(Path(__file__).parents[1] / "config" / "funds.yaml")
     frame = pd.DataFrame(

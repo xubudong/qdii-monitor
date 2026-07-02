@@ -299,7 +299,7 @@ function fundNameCell(row) {
 }
 
 function navEstimateCell(row) {
-  const label = row.premium_source === "estimated_nav"
+  const label = row.premium_source === "estimated_nav" || row.premium_source === "estimated_nav_no_price"
     ? '<small class="estimate-label">估算 NAV</small>'
     : row.premium_source === "estimated_nav_unavailable"
       ? '<small class="estimate-label unavailable">估算条件不足</small>'
@@ -313,6 +313,8 @@ function navEstimateCell(row) {
 function premiumCell(row) {
   const label = row.premium_source === "estimated_nav"
     ? '<small class="estimate-label">参考估算</small>'
+    : row.premium_source === "estimated_nav_no_price"
+      ? '<small class="estimate-label unavailable">缺场内价</small>'
     : row.premium_source === "estimated_nav_unavailable"
       ? '<small class="estimate-label unavailable">暂不计算</small>'
     : "";

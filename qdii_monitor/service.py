@@ -700,10 +700,15 @@ def _quote_with_daily_nav_fallback(
             baseline,
             fund.nav_estimate.reference_weight,
         )
-        if estimate is not None and result.get("latest_price") is not None:
+        if estimate is not None:
             result["iopv"] = estimate["estimated_nav"]
-            result["premium_rate"] = calculate_premium(result.get("latest_price"), estimate["estimated_nav"])
-            result["premium_source"] = "estimated_nav"
+            result["estimated_nav"] = estimate["estimated_nav"]
+            if result.get("latest_price") is not None:
+                result["premium_rate"] = calculate_premium(result.get("latest_price"), estimate["estimated_nav"])
+                result["premium_source"] = "estimated_nav"
+            else:
+                result["premium_rate"] = None
+                result["premium_source"] = "estimated_nav_no_price"
             result["premium_note"] = _estimated_nav_note(fund, latest_daily, references or {}, db, result)
             result["premium_formula"] = _estimated_nav_formula(fund, latest_daily, references or {}, db, result)
             return result
